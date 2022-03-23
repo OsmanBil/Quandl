@@ -9,9 +9,38 @@
     <script>
         const API_KEY = 'pyX1VXXY69DqZMjDZGC2';
 
+        async function loadCourse(){
+            let today = new Date();
+            today.setDate(new Date().getDate() - 1)
+
+            let startDate = today.toISOString().split('T')[0];
+            let endDate = today.toISOString().split('T')[0];
+            let url =`https://data.nasdaq.com/api/v3/datasets/BITFINEX/LUNAF0USTF0?start_date=${startDate}&end_date=${endDate}&api_key=${API_KEY}`;
+            let response = await fetch(url);
+            let responseAsJson = await response.json();
+            showBitcoinToday(responseAsJson);
+          
+
+
+        }
+
+        function showBitcoinToday(responseAsJson){
+            let bitcoinToday = responseAsJson['dataset']['data'][0][3];
+            document.getElementById('bitcoinInUSDToday').innerHTML = bitcoinToday;
+        }
+
     </script>
 </head>
-<body>
-    
+
+
+
+
+
+
+
+<body onload="loadCourse()">
+        <h1>Was kostet ein Bitcoin aktuell?</h1>
+        
+        <div>Aktuell kostet ein Bitcoin <b id="bitcoinInUSDToday">60.000 USD</b></div>
 </body>
 </html>
